@@ -1,0 +1,116 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Benefit: Additional benefits offered to players.
+Player: Represents a player who is part of a football club.
+BroadcastSchedule: Broadcast schedule for games, linking games and announcers.
+TvAnnouncer: TV announcers providing commentary for games.
+CharityAffiliation: Charities affiliated with either clubs or players.
+FootballClub: Represents an NFL football club.
+GameStatistic: Statistics for games played by players.
+Healthcare: Healthcare information for each player.
+Merchandise: Represents merchandise associated with football clubs.
+Position: Different positions a player can have during a game.
+PracticeSchedule: Schedule for club practice sessions.
+Stadium: Details about stadiums for the clubs.
+'''
+}
+
+Table Benefit {
+    id INTEGER [primary key]
+    name VARCHAR 
+    player_id INTEGER 
+    description VARCHAR 
+    }
+
+Table Player {
+    id INTEGER [primary key]
+    name VARCHAR 
+    position VARCHAR 
+    history VARCHAR 
+    football_club_id INTEGER 
+    }
+
+Table BroadcastSchedule {
+    id INTEGER [primary key]
+    game_id INTEGER 
+    tv_announcer_id INTEGER 
+    game_date DATE 
+    }
+
+Table TvAnnouncer {
+    id INTEGER [primary key]
+    name VARCHAR 
+    network VARCHAR 
+    }
+
+Table CharityAffiliation {
+    id INTEGER [primary key]
+    name VARCHAR 
+    player_id INTEGER 
+    club_id INTEGER 
+    }
+
+Table FootballClub {
+    id INTEGER [primary key]
+    name VARCHAR 
+    stadium_name VARCHAR 
+    foundation_date DATE 
+    }
+
+Table GameStatistic {
+    id INTEGER [primary key]
+    player_id INTEGER 
+    game_date DATE 
+    goals INTEGER 
+    assists INTEGER 
+    }
+
+Table Healthcare {
+    id INTEGER [primary key]
+    policy_number VARCHAR 
+    player_id INTEGER 
+    provider VARCHAR 
+    }
+
+Table Merchandise {
+    id INTEGER [primary key]
+    name VARCHAR 
+    price INTEGER 
+    club_id INTEGER 
+    }
+
+Table Position {
+    id INTEGER [primary key]
+    name VARCHAR 
+    }
+
+Table PracticeSchedule {
+    id INTEGER [primary key]
+    club_id INTEGER 
+    date DATE 
+    time VARCHAR 
+    }
+
+Table Stadium {
+    id INTEGER [primary key]
+    name VARCHAR 
+    location VARCHAR 
+    capacity INTEGER 
+    }
+
+
+
+// Relationships
+    Ref: Benefit.(player_id) < Player.(id)
+    Ref: Player.(football_club_id) < FootballClub.(id)
+    Ref: BroadcastSchedule.(tv_announcer_id) < TvAnnouncer.(id)
+    Ref: CharityAffiliation.(club_id) < FootballClub.(id)
+    Ref: CharityAffiliation.(player_id) < Player.(id)
+    Ref: GameStatistic.(player_id) < Player.(id)
+    Ref: Healthcare.(player_id) < Player.(id)
+    Ref: Merchandise.(club_id) < FootballClub.(id)
+    Ref: PracticeSchedule.(club_id) < FootballClub.(id)

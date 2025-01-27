@@ -1,0 +1,3 @@
+ create a database to load information from multiple football clubs (NFL). the information should have game statistics, player names, player history, positions played, merchandise for sale, names of stadiums, benefits, healthcare, charity affiliations, tv announcers.
+.
+Create at least 12 tables (models)

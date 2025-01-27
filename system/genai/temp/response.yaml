@@ -1,0 +1,223 @@
+"models":
+- "classname": |-
+    FootballClub
+  "code": |-
+    class FootballClub(Base):
+        __tablename__ = 'football_club'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+        stadium_name = Column(String)
+        foundation_date = Column(Date)
+  "description": |-
+    Represents an NFL football club.
+  "name": |-
+    football_club
+- "classname": |-
+    Player
+  "code": |-
+    class Player(Base):
+        __tablename__ = 'player'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+        position = Column(String)
+        history = Column(String)
+        football_club_id = Column(Integer, ForeignKey('football_club.id'))
+  "description": |-
+    Represents a player who is part of a football club.
+  "name": |-
+    player
+- "classname": |-
+    GameStatistics
+  "code": |-
+    class GameStatistics(Base):
+        __tablename__ = 'game_statistics'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        player_id = Column(Integer, ForeignKey('player.id'), nullable=False)
+        game_date = Column(Date, nullable=False)
+        goals = Column(Integer, default=0)
+        assists = Column(Integer, default=0)
+  "description": |-
+    Statistics for games played by players.
+  "name": |-
+    game_statistics
+- "classname": |-
+    Merchandise
+  "code": |-
+    class Merchandise(Base):
+        __tablename__ = 'merchandise'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+        price = Column(Integer)
+        club_id = Column(Integer, ForeignKey('football_club.id'))
+  "description": |-
+    Represents merchandise associated with football clubs.
+  "name": |-
+    merchandise
+- "classname": |-
+    Position
+  "code": |-
+    class Position(Base):
+        __tablename__ = 'position'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+  "description": |-
+    Different positions a player can have during a game.
+  "name": |-
+    position
+- "classname": |-
+    Healthcare
+  "code": |-
+    class Healthcare(Base):
+        __tablename__ = 'healthcare'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        policy_number = Column(String, nullable=False)
+        player_id = Column(Integer, ForeignKey('player.id'), nullable=False)
+        provider = Column(String)
+  "description": |-
+    Healthcare information for each player.
+  "name": |-
+    healthcare
+- "classname": |-
+    Benefit
+  "code": |-
+    class Benefit(Base):
+        __tablename__ = 'benefit'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+        player_id = Column(Integer, ForeignKey('player.id'), nullable=False)
+        description = Column(String)
+  "description": |-
+    Additional benefits offered to players.
+  "name": |-
+    benefit
+- "classname": |-
+    CharityAffiliation
+  "code": |-
+    class CharityAffiliation(Base):
+        __tablename__ = 'charity_affiliation'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+        player_id = Column(Integer, ForeignKey('player.id'), nullable=True)
+        club_id = Column(Integer, ForeignKey('football_club.id'), nullable=True)
+  "description": |-
+    Charities affiliated with either clubs or players.
+  "name": |-
+    charity_affiliation
+- "classname": |-
+    TVAnnouncer
+  "code": |-
+    class TVAnnouncer(Base):
+        __tablename__ = 'tv_announcer'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+        network = Column(String)
+  "description": |-
+    TV announcers providing commentary for games.
+  "name": |-
+    tv_announcer
+- "classname": |-
+    Stadium
+  "code": |-
+    class Stadium(Base):
+        __tablename__ = 'stadium'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+        location = Column(String)
+        capacity = Column(Integer)
+  "description": |-
+    Details about stadiums for the clubs.
+  "name": |-
+    stadium
+- "classname": |-
+    PracticeSchedule
+  "code": |-
+    class PracticeSchedule(Base):
+        __tablename__ = 'practice_schedule'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        club_id = Column(Integer, ForeignKey('football_club.id'))
+        date = Column(Date, nullable=False)
+        time = Column(String)
+  "description": |-
+    Schedule for club practice sessions.
+  "name": |-
+    practice_schedule
+- "classname": |-
+    BroadcastSchedule
+  "code": |-
+    class BroadcastSchedule(Base):
+        __tablename__ = 'broadcast_schedule'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        game_id = Column(Integer)
+        tv_announcer_id = Column(Integer, ForeignKey('tv_announcer.id'))
+        game_date = Column(Date, nullable=False)
+  "description": |-
+    Broadcast schedule for games, linking games and announcers.
+  "name": |-
+    broadcast_schedule
+"name": |-
+  NFLClubDataManagement
+"rules": []
+"test_data": |-
+  Test data for NFL-related database models.
+"test_data_rows":
+- "code": |-
+    club1 = FootballClub(id=1, name="Miami Dolphins", stadium_name="Hard Rock Stadium", foundation_date=date(1966, 8, 16))
+  "test_data_row_variable": |-
+    club1
+- "code": |-
+    club2 = FootballClub(id=2, name="New England Patriots", stadium_name="Gillette Stadium", foundation_date=date(1960, 9, 16))
+  "test_data_row_variable": |-
+    club2
+- "code": |-
+    club3 = FootballClub(id=3, name="Dallas Cowboys", stadium_name="AT&T Stadium", foundation_date=date(1960, 1, 22))
+  "test_data_row_variable": |-
+    club3
+- "code": |-
+    club4 = FootballClub(id=4, name="San Francisco 49ers", stadium_name="Levi's Stadium", foundation_date=date(1946, 8, 9))
+  "test_data_row_variable": |-
+    club4
+- "code": |-
+    player1 = Player(id=1, name="Tom Brady", position="QB", history="20 seasons", football_club_id=2)
+  "test_data_row_variable": |-
+    player1
+- "code": |-
+    player2 = Player(id=2, name="Troy Aikman", position="QB", history="12 seasons", football_club_id=3)
+  "test_data_row_variable": |-
+    player2
+- "code": |-
+    player3 = Player(id=3, name="Patrick Willis", position="LB", history="8 seasons", football_club_id=4)
+  "test_data_row_variable": |-
+    player3
+- "code": |-
+    player4 = Player(id=4, name="Dan Marino", position="QB", history="17 seasons", football_club_id=1)
+  "test_data_row_variable": |-
+    player4
+- "code": |-
+    stat1 = GameStatistics(id=1, player_id=1, game_date=date(2023, 10, 10), goals=2, assists=3)
+  "test_data_row_variable": |-
+    stat1
+- "code": |-
+    stat2 = GameStatistics(id=2, player_id=2, game_date=date(2023, 10, 11), goals=1, assists=1)
+  "test_data_row_variable": |-
+    stat2
+- "code": |-
+    stat3 = GameStatistics(id=3, player_id=3, game_date=date(2023, 10, 12), goals=0, assists=0)
+  "test_data_row_variable": |-
+    stat3
+- "code": |-
+    stat4 = GameStatistics(id=4, player_id=4, game_date=date(2023, 10, 13), goals=3, assists=2)
+  "test_data_row_variable": |-
+    stat4
+"test_data_sqlite": ""

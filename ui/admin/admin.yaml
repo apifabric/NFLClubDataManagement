@@ -1,0 +1,316 @@
+about:
+  date: January 27, 2025 17:18:40
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 9
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Benefit:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: player_id
+      required: true
+    - name: description
+    - name: id
+    description: Additional benefits offered to players.
+    info_list: Additional benefits offered to players.
+    tab_groups:
+    - direction: toone
+      fks:
+      - player_id
+      name: player
+      resource: Player
+    type: Benefit
+    user_key: name
+  BroadcastSchedule:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: tv_announcer_id
+    - name: game_date
+      required: true
+      type: DATE
+    - name: game_id
+    description: Broadcast schedule for games, linking games and announcers.
+    info_list: Broadcast schedule for games, linking games and announcers.
+    tab_groups:
+    - direction: toone
+      fks:
+      - tv_announcer_id
+      name: tv_announcer
+      resource: TvAnnouncer
+    type: BroadcastSchedule
+    user_key: id
+  CharityAffiliation:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: club_id
+    - name: player_id
+    - name: id
+    description: Charities affiliated with either clubs or players.
+    info_list: Charities affiliated with either clubs or players.
+    tab_groups:
+    - direction: toone
+      fks:
+      - club_id
+      name: club
+      resource: FootballClub
+    - direction: toone
+      fks:
+      - player_id
+      name: player
+      resource: Player
+    type: CharityAffiliation
+    user_key: name
+  FootballClub:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: stadium_name
+    - name: foundation_date
+      type: DATE
+    - name: id
+    description: Represents an NFL football club.
+    info_list: Represents an NFL football club.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - club_id
+      name: CharityAffiliationList
+      resource: CharityAffiliation
+    - direction: tomany
+      fks:
+      - club_id
+      name: MerchandiseList
+      resource: Merchandise
+    - direction: tomany
+      fks:
+      - football_club_id
+      name: PlayerList
+      resource: Player
+    - direction: tomany
+      fks:
+      - club_id
+      name: PracticeScheduleList
+      resource: PracticeSchedule
+    type: FootballClub
+    user_key: name
+  GameStatistic:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: player_id
+      required: true
+    - name: game_date
+      required: true
+      type: DATE
+    - name: goals
+    - name: assists
+    description: Statistics for games played by players.
+    info_list: Statistics for games played by players.
+    tab_groups:
+    - direction: toone
+      fks:
+      - player_id
+      name: player
+      resource: Player
+    type: GameStatistic
+    user_key: id
+  Healthcare:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: player_id
+      required: true
+    - name: policy_number
+      required: true
+    - name: provider
+    description: Healthcare information for each player.
+    info_list: Healthcare information for each player.
+    tab_groups:
+    - direction: toone
+      fks:
+      - player_id
+      name: player
+      resource: Player
+    type: Healthcare
+    user_key: id
+  Merchandise:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: club_id
+    - name: price
+    - name: id
+    description: Represents merchandise associated with football clubs.
+    info_list: Represents merchandise associated with football clubs.
+    tab_groups:
+    - direction: toone
+      fks:
+      - club_id
+      name: club
+      resource: FootballClub
+    type: Merchandise
+    user_key: name
+  Player:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: football_club_id
+    - name: position
+    - name: history
+    - name: id
+    description: Represents a player who is part of a football club.
+    info_list: Represents a player who is part of a football club.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - player_id
+      name: BenefitList
+      resource: Benefit
+    - direction: tomany
+      fks:
+      - player_id
+      name: CharityAffiliationList
+      resource: CharityAffiliation
+    - direction: tomany
+      fks:
+      - player_id
+      name: GameStatisticList
+      resource: GameStatistic
+    - direction: tomany
+      fks:
+      - player_id
+      name: HealthcareList
+      resource: Healthcare
+    - direction: toone
+      fks:
+      - football_club_id
+      name: football_club
+      resource: FootballClub
+    type: Player
+    user_key: name
+  Position:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Different positions a player can have during a game.
+    info_list: Different positions a player can have during a game.
+    type: Position
+    user_key: name
+  PracticeSchedule:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: club_id
+    - name: date
+      required: true
+      type: DATE
+    - name: time
+    description: Schedule for club practice sessions.
+    info_list: Schedule for club practice sessions.
+    tab_groups:
+    - direction: toone
+      fks:
+      - club_id
+      name: club
+      resource: FootballClub
+    type: PracticeSchedule
+    user_key: id
+  Stadium:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: location
+    - name: capacity
+    - name: id
+    description: Details about stadiums for the clubs.
+    info_list: Details about stadiums for the clubs.
+    type: Stadium
+    user_key: name
+  TvAnnouncer:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: network
+    - name: id
+    description: TV announcers providing commentary for games.
+    info_list: TV announcers providing commentary for games.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - tv_announcer_id
+      name: BroadcastScheduleList
+      resource: BroadcastSchedule
+    type: TvAnnouncer
+    user_key: name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

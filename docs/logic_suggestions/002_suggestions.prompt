@@ -1,0 +1,16 @@
+[
+    {
+        "name": "Game Count Derivation",
+        "description": "Derives the game count for a player.",
+        "use_case": "Derive game count for player's records.",
+        "entity": "Player",
+        "code": "Rule.count(derive=Player.game_count, as_count_of=GameStatistics)"
+    },
+    {
+        "name": "Honorary Canadian Status Determination",
+        "description": "Sets honorary Canadian status for players with more than 3 games.",
+        "use_case": "Determine if a player becomes an honorary Canadian.",
+        "entity": "Player",
+        "code": "Rule.constraint(validate=Player,\n    as_condition=lambda row: row.game_count > 3 and not row.is_honorary_canadian,\n    error_msg=\"Player must be set as honorary Canadian after playing more than 3 games\")"
+    }
+]

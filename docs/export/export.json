@@ -1,0 +1,53 @@
+{
+    "rules": [],
+    "models": [
+        {
+            "classname": "FootballClub",
+            "code": "class FootballClub(Base):  # type: ignore\n    \"\"\"\n    description: Represents an NFL football club.\n    \"\"\"\n    __tablename__ = 'football_club'\n    _s_collection_name = 'FootballClub'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    stadium_name = Column(String)\n    foundation_date = Column(Date)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    MerchandiseList : Mapped[List[\"Merchandise\"]] = relationship(back_populates=\"club\")\n    PlayerList : Mapped[List[\"Player\"]] = relationship(back_populates=\"football_club\")\n    PracticeScheduleList : Mapped[List[\"PracticeSchedule\"]] = relationship(back_populates=\"club\")\n    CharityAffiliationList : Mapped[List[\"CharityAffiliation\"]] = relationship(back_populates=\"club\")"
+        },
+        {
+            "classname": "Position",
+            "code": "class Position(Base):  # type: ignore\n    \"\"\"\n    description: Different positions a player can have during a game.\n    \"\"\"\n    __tablename__ = 'position'\n    _s_collection_name = 'Position'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)"
+        },
+        {
+            "classname": "Stadium",
+            "code": "class Stadium(Base):  # type: ignore\n    \"\"\"\n    description: Details about stadiums for the clubs.\n    \"\"\"\n    __tablename__ = 'stadium'\n    _s_collection_name = 'Stadium'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    location = Column(String)\n    capacity = Column(Integer)"
+        },
+        {
+            "classname": "TvAnnouncer",
+            "code": "class TvAnnouncer(Base):  # type: ignore\n    \"\"\"\n    description: TV announcers providing commentary for games.\n    \"\"\"\n    __tablename__ = 'tv_announcer'\n    _s_collection_name = 'TvAnnouncer'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    network = Column(String)\n\n    # parent relationships (access parent)\n\n    # child relationships (access children)\n    BroadcastScheduleList : Mapped[List[\"BroadcastSchedule\"]] = relationship(back_populates=\"tv_announcer\")"
+        },
+        {
+            "classname": "BroadcastSchedule",
+            "code": "class BroadcastSchedule(Base):  # type: ignore\n    \"\"\"\n    description: Broadcast schedule for games, linking games and announcers.\n    \"\"\"\n    __tablename__ = 'broadcast_schedule'\n    _s_collection_name = 'BroadcastSchedule'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    game_id = Column(Integer)\n    tv_announcer_id = Column(ForeignKey('tv_announcer.id'))\n    game_date = Column(Date, nullable=False)\n\n    # parent relationships (access parent)\n    tv_announcer : Mapped[\"TvAnnouncer\"] = relationship(back_populates=(\"BroadcastScheduleList\"))"
+        },
+        {
+            "classname": "Merchandise",
+            "code": "class Merchandise(Base):  # type: ignore\n    \"\"\"\n    description: Represents merchandise associated with football clubs.\n    \"\"\"\n    __tablename__ = 'merchandise'\n    _s_collection_name = 'Merchandise'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    price = Column(Integer)\n    club_id = Column(ForeignKey('football_club.id'))\n\n    # parent relationships (access parent)\n    club : Mapped[\"FootballClub\"] = relationship(back_populates=(\"MerchandiseList\"))"
+        },
+        {
+            "classname": "Player",
+            "code": "class Player(Base):  # type: ignore\n    \"\"\"\n    description: Represents a player who is part of a football club.\n    \"\"\"\n    __tablename__ = 'player'\n    _s_collection_name = 'Player'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    position = Column(String)\n    history = Column(String)\n    football_club_id = Column(ForeignKey('football_club.id'))\n\n    # parent relationships (access parent)\n    football_club : Mapped[\"FootballClub\"] = relationship(back_populates=(\"PlayerList\"))\n\n    # child relationships (access children)\n    BenefitList : Mapped[List[\"Benefit\"]] = relationship(back_populates=\"player\")\n    CharityAffiliationList : Mapped[List[\"CharityAffiliation\"]] = relationship(back_populates=\"player\")\n    GameStatisticList : Mapped[List[\"GameStatistic\"]] = relationship(back_populates=\"player\")\n    HealthcareList : Mapped[List[\"Healthcare\"]] = relationship(back_populates=\"player\")"
+        },
+        {
+            "classname": "PracticeSchedule",
+            "code": "class PracticeSchedule(Base):  # type: ignore\n    \"\"\"\n    description: Schedule for club practice sessions.\n    \"\"\"\n    __tablename__ = 'practice_schedule'\n    _s_collection_name = 'PracticeSchedule'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    club_id = Column(ForeignKey('football_club.id'))\n    date = Column(Date, nullable=False)\n    time = Column(String)\n\n    # parent relationships (access parent)\n    club : Mapped[\"FootballClub\"] = relationship(back_populates=(\"PracticeScheduleList\"))"
+        },
+        {
+            "classname": "Benefit",
+            "code": "class Benefit(Base):  # type: ignore\n    \"\"\"\n    description: Additional benefits offered to players.\n    \"\"\"\n    __tablename__ = 'benefit'\n    _s_collection_name = 'Benefit'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    player_id = Column(ForeignKey('player.id'), nullable=False)\n    description = Column(String)\n\n    # parent relationships (access parent)\n    player : Mapped[\"Player\"] = relationship(back_populates=(\"BenefitList\"))"
+        },
+        {
+            "classname": "CharityAffiliation",
+            "code": "class CharityAffiliation(Base):  # type: ignore\n    \"\"\"\n    description: Charities affiliated with either clubs or players.\n    \"\"\"\n    __tablename__ = 'charity_affiliation'\n    _s_collection_name = 'CharityAffiliation'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String, nullable=False)\n    player_id = Column(ForeignKey('player.id'))\n    club_id = Column(ForeignKey('football_club.id'))\n\n    # parent relationships (access parent)\n    club : Mapped[\"FootballClub\"] = relationship(back_populates=(\"CharityAffiliationList\"))\n    player : Mapped[\"Player\"] = relationship(back_populates=(\"CharityAffiliationList\"))"
+        },
+        {
+            "classname": "GameStatistic",
+            "code": "class GameStatistic(Base):  # type: ignore\n    \"\"\"\n    description: Statistics for games played by players.\n    \"\"\"\n    __tablename__ = 'game_statistics'\n    _s_collection_name = 'GameStatistic'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    player_id = Column(ForeignKey('player.id'), nullable=False)\n    game_date = Column(Date, nullable=False)\n    goals = Column(Integer)\n    assists = Column(Integer)\n\n    # parent relationships (access parent)\n    player : Mapped[\"Player\"] = relationship(back_populates=(\"GameStatisticList\"))"
+        },
+        {
+            "classname": "Healthcare",
+            "code": "class Healthcare(Base):  # type: ignore\n    \"\"\"\n    description: Healthcare information for each player.\n    \"\"\"\n    __tablename__ = 'healthcare'\n    _s_collection_name = 'Healthcare'  # type: ignore\n\n    id = Column(Integer, primary_key=True)\n    policy_number = Column(String, nullable=False)\n    player_id = Column(ForeignKey('player.id'), nullable=False)\n    provider = Column(String)\n\n    # parent relationships (access parent)\n    player : Mapped[\"Player\"] = relationship(back_populates=(\"HealthcareList\"))"
+        }
+    ]
+}

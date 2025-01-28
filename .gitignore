@@ -9,3 +9,4 @@ devops/docker-compose-dev-local-nginx/www
 devops/docker-compose-dev-azure-nginx/www__pycache__/
 *.pyc
 logs/
+run.log

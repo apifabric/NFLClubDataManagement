@@ -1,0 +1,91 @@
+"models":
+- "classname": |-
+    Player
+  "code": |
+    class Player(Base):
+        __tablename__ = 'player'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        name = Column(String, nullable=False)
+        position = Column(String)
+        history = Column(String)
+        football_club_id = Column(Integer, ForeignKey('football_club.id'))
+        game_count = Column(Integer, default=0)  # new column
+        is_honorary_canadian = Column(Boolean, default=False)  # new column
+  "description": |-
+    Represents a player who is part of a football club including game count and honorary Canadian status.
+  "name": |-
+    player
+- "classname": |-
+    GameStatistics
+  "code": |-
+    class GameStatistics(Base):
+        __tablename__ = 'game_statistics'
+
+        id = Column(Integer, primary_key=True, autoincrement=True)
+        player_id = Column(Integer, ForeignKey('player.id'), nullable=False)
+        game_date = Column(Date, nullable=False)
+        goals = Column(Integer, default=0)
+        assists = Column(Integer, default=0)
+  "description": |-
+    Statistics for games played by players.
+  "name": |-
+    game_statistics
+"name": |-
+  HonoraryCanadianLogic
+"rules":
+- "code": |-
+    Rule.count(derive=Player.game_count, as_count_of=GameStatistics)
+  "description": |-
+    Derives the game count for a player.
+  "entity": |-
+    Player
+  "name": |-
+    Game Count Derivation
+  "use_case": |-
+    Derive game count for player's records.
+- "code": |-
+    Rule.constraint(validate=Player,
+        as_condition=lambda row: row.game_count > 3 and not row.is_honorary_canadian,
+        error_msg="Player must be set as honorary Canadian after playing more than 3 games")
+  "description": |-
+    Sets honorary Canadian status for players with more than 3 games.
+  "entity": |-
+    Player
+  "name": |-
+    Honorary Canadian Status Determination
+  "use_case": |-
+    Determine if a player becomes an honorary Canadian.
+"test_data": |-
+  Players' data to verify honorary Canadian qualification.
+"test_data_rows":
+- "code": |-
+    player1 = Player(id=1, name="John Doe", game_count=4, is_honorary_canadian=False)
+  "test_data_row_variable": |-
+    player1
+- "code": |-
+    player2 = Player(id=2, name="Jane Smith", game_count=2, is_honorary_canadian=False)
+  "test_data_row_variable": |-
+    player2
+- "code": |-
+    player3 = Player(id=3, name="Alex Johnson", game_count=3, is_honorary_canadian=False)
+  "test_data_row_variable": |-
+    player3
+- "code": |-
+    stat = GameStatistics(player_id=1, game_date=date(2023, 10, 10), goals=2, assists=3)
+  "test_data_row_variable": |-
+    test_stat1
+- "code": |-
+    stat = GameStatistics(player_id=2, game_date=date(2023, 10, 11), goals=0, assists=1)
+  "test_data_row_variable": |-
+    test_stat2
+- "code": |-
+    stat = GameStatistics(player_id=3, game_date=date(2023, 10, 12), goals=1, assists=0)
+  "test_data_row_variable": |-
+    test_stat3
+- "code": |-
+    stat = GameStatistics(player_id=1, game_date=date(2023, 10, 13), goals=3, assists=2)
+  "test_data_row_variable": |-
+    test_stat4
+"test_data_sqlite": |-
+  Test dataset for verifying honorary Canadian status of players.
